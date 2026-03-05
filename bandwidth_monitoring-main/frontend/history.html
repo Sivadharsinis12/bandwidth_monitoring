@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Lavender Usage History</title>
+<link rel="stylesheet" href="/static/css/dashboard.css">
+<link rel="stylesheet" href="/static/css/history.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <div class="brand">
+        <div class="logo"></div>
+        <h2>NetBandwidth</h2>
+    </div>
+
+    <ul class="menu">
+        <li onclick="window.location='/dashboard'">Dashboard</li>
+        <li class="active">History</li>
+    </ul>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="content">
+
+    <div class="header">
+        <h1>Lavender Usage History</h1>
+        <div class="header-actions">
+            <button class="outline">Export as CSV</button>
+            <button class="primary">Download Report</button>
+        </div>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filters">
+        <select><option>Last 30 Days</option></select>
+        <select><option>All Devices</option></select>
+        <select><option>High Usage</option></select>
+        <select><option>Any Action</option></select>
+        <button class="primary">Apply Filters</button>
+    </div>
+
+    <div class="history-grid">
+
+        <!-- TABLE -->
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Device</th>
+                        <th>IP</th>
+                        <th>Data In/Out</th>
+                        <th>Action</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTable"></tbody>
+            </table>
+        </div>
+
+        <!-- RIGHT SIDE ANALYTICS -->
+        <div class="side-analytics">
+
+            <div class="card">
+                <h3>Daily Peak (GB)</h3>
+                <div class="chart-container">
+                    <canvas id="dailyPeakChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Top Consumers</h3>
+                <div id="topConsumers"></div>
+            </div>
+
+            <div class="total-card">
+                <h4>TOTAL BANDWIDTH (30D)</h4>
+                <h1 id="totalBandwidth">0 TB</h1>
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+</div>
+
+<script src="/static/js/history.js"></script>
+</body>
+</html>

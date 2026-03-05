@@ -4,6 +4,11 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 import asyncio
 import os
+import sys
+
+# Add the backend directory to path for imports
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 from traffic_monitor import device_stats, start_monitor
 from database import init_db
 
@@ -18,7 +23,8 @@ from models import History
 from datetime import datetime, timedelta
 import sqlite3
 
-conn = sqlite3.connect('bandwidth.db')
+DATABASE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'bandwidth.db')
+conn = sqlite3.connect(DATABASE_PATH)
 cursor = conn.cursor()
 cursor.execute('SELECT COUNT(*) FROM history')
 count = cursor.fetchone()[0]
@@ -78,7 +84,35 @@ async def get_analytics():
     from database import get_analytics
     return get_analytics()
 
-# 4. WebSocket - Updated to handle the dictionary correctly
+# 4. Device Limit Management API Routes
+@app.get("/api/device-limits")
+async def get_device_limits():
+    from database import get_device_limits
+    return get_device_limits()
+
+@app.post("/api/device-limits")
+async def set_device_limit(device_name: str, ip: str, data_limit_mb: float):
+    from database import set_device_limit
+    set_device_limit(device_name, ip, data_limit_mb)
+    return {"message": f"Data limit set for {device_name}"}
+
+@app.post("/api/device-limits/unblock")
+async def unblock_device(device_name: str):
+    from database import unblock_device
+    unblock_device(device_name)
+    return {"message": f"Device {device_name} has been unblocked"}
+
+@app.get("/api/high-usage")
+async def get_high_usage():
+    from database import get_high_usage_devices
+    return get_high_usage_devices(80.0)
+
+@app.get("/api/blocked-devices")
+async def get_blocked():
+    from database import get_blocked_devices
+    return get_blocked_devices()
+
+# 5. WebSocket - Updated to handle the dictionary correctly
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()

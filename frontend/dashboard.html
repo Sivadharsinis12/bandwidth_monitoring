@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -54,8 +53,8 @@
             </div>
 
             <div class="card">
-                <h4>Network Health</h4>
-                <h2 id="health">0%</h2>
+                <h4>Blocked Devices</h4>
+                <h2 id="blockedCount">0</h2>
             </div>
         </div>
 
@@ -77,10 +76,59 @@
                         <th>Device</th>
                         <th>IP</th>
                         <th>Status</th>
+                        <th>Usage</th>
+                        <th>Data Limit (MB)</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="deviceTable"></tbody>
             </table>
+        </div>
+
+        <!-- HIGH USAGE ALERTS SECTION -->
+        <div class="device-section" id="highUsageSection" style="display:none;">
+            <h3>⚠️ High Usage Alerts</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Device</th>
+                        <th>IP</th>
+                        <th>Usage %</th>
+                        <th>Current (MB)</th>
+                        <th>Limit (MB)</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="highUsageTable"></tbody>
+            </table>
+        </div>
+
+        <!-- BLOCKED DEVICES SECTION -->
+        <div class="device-section" id="blockedSection" style="display:none;">
+            <h3>🚫 Blocked Devices (Data Limit Exceeded)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Device</th>
+                        <th>IP</th>
+                        <th>Used (MB)</th>
+                        <th>Limit (MB)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="blockedTable"></tbody>
+            </table>
+        </div>
+
+        <!-- ADD DEVICE LIMIT FORM -->
+        <div class="device-section">
+            <h3>Set Device Data Limit</h3>
+            <form id="limitForm" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                <input type="text" id="deviceName" placeholder="Device Name" style="padding:8px; border:1px solid #ddd; border-radius:4px;">
+                <input type="text" id="deviceIP" placeholder="IP Address" style="padding:8px; border:1px solid #ddd; border-radius:4px;">
+                <input type="number" id="dataLimit" placeholder="Limit (MB)" style="padding:8px; border:1px solid #ddd; border-radius:4px;">
+                <button type="submit" style="padding:8px 16px; background:#7c5dfa; color:white; border:none; border-radius:4px; cursor:pointer;">Set Limit</button>
+            </form>
         </div>
 
     </main>

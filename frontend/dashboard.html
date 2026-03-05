@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Live Monitoring Dashboard</title>
+<link rel="stylesheet" href="/static/css/dashboard.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+<canvas id="bandwidthChart"></canvas>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="logo-icon"></div>
+            <div>
+                <h2>NetBandwidth</h2>
+                <span>ADMIN CONSOLE</span>
+            </div>
+        </div>
+
+        <ul class="menu">
+            <li class="active">Dashboard</li>
+            <li onclick="window.location='/history'">History</li>
+        </ul>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="content">
+
+        <div class="header">
+            <h1>Live Monitoring Dashboard</h1>
+        </div>
+
+        <!-- STAT CARDS -->
+        <div class="cards">
+            <div class="card">
+                <h4>Total Bandwidth</h4>
+                <h2 id="totalBandwidth">0 TB</h2>
+            </div>
+
+            <div class="card">
+                <h4>Active Devices</h4>
+                <h2 id="activeDevices">0</h2>
+            </div>
+
+            <div class="card">
+                <h4>High Usage Alerts</h4>
+                <h2 id="alerts">0</h2>
+            </div>
+
+            <div class="card">
+                <h4>Network Health</h4>
+                <h2 id="health">0%</h2>
+            </div>
+        </div>
+
+        <!-- CURRENT NETWORK ACTIVITY -->
+        <div class="graph-section">
+            <h3>Current Network Activity</h3>
+            <h2 id="currentSpeed">0 Mbps</h2>
+            <div class="chart-container">
+                <canvas id="networkChart"></canvas>
+            </div>
+        </div>
+
+        <!-- DEVICE TABLE -->
+        <div class="device-section">
+            <h3>Device Management</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Device</th>
+                        <th>IP</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="deviceTable"></tbody>
+            </table>
+        </div>
+
+    </main>
+
+</div>
+
+<script src="/static/js/dashboard.js"></script>
+</body>
+</html>

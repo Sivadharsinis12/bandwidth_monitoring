@@ -1,0 +1,111 @@
+body {
+    margin:0;
+    font-family:Inter, sans-serif;
+    background:#f6f5fb;
+}
+
+.layout { display:flex; }
+
+.sidebar {
+    width:240px;
+    background:#fff;
+    padding:20px;
+    height:100vh;
+    border-right:1px solid #eee;
+}
+
+.brand {
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.logo {
+    width:35px;
+    height:35px;
+    background:#8a6cff;
+    border-radius:8px;
+}
+
+.menu { list-style:none; padding:0; margin-top:30px; }
+
+.menu li {
+    padding:12px;
+    border-radius:8px;
+    cursor:pointer;
+    color:#666;
+}
+
+.menu .active {
+    background:#ece8ff;
+    color:#6a4cff;
+}
+
+.content { flex:1; padding:30px 40px; }
+
+.header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.primary {
+    background:#8a6cff;
+    color:white;
+    border:none;
+    padding:10px 18px;
+    border-radius:10px;
+}
+
+.outline {
+    border:1px solid #8a6cff;
+    background:transparent;
+    padding:10px 18px;
+    border-radius:10px;
+}
+
+.filters {
+    margin-top:20px;
+    display:flex;
+    gap:10px;
+    background:white;
+    padding:15px;
+    border-radius:12px;
+}
+
+.history-grid {
+    margin-top:25px;
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:25px;
+}
+
+.table-card {
+    background:white;
+    border-radius:16px;
+    padding:20px;
+}
+
+table {
+    width:100%;
+    border-collapse:collapse;
+}
+
+th, td {
+    padding:12px;
+    border-bottom:1px solid #eee;
+}
+
+.card {
+    background:white;
+    padding:20px;
+    border-radius:16px;
+    margin-bottom:20px;
+}
+
+.total-card {
+    background:#8a6cff;
+    color:white;
+    padding:25px;
+    border-radius:18px;
+}

@@ -1,30 +1,14 @@
-# TODO: Add High Usage Device Identification and Data Limit Blocking Features
+# TODO: Activate Export CSV and Download Options in History Page
 
-## Phase 1: Backend Updates
-- [x] 1. Update backend/models.py - Add DeviceLimit model
-- [x] 2. Update backend/database.py - Add device_limits and device_usage tables
-- [x] 3. Update backend/traffic_monitor.py - Track per-device usage, check limits, implement blocking
-- [x] 4. Update backend/main.py - Add API endpoints for device limit management
+## Task: Activate the export CSV and download option in history page - when click download the table in history should download..and also export csv..activate them
 
-## Phase 2: Frontend Updates
-- [x] 5. Update frontend/dashboard.html - Add high usage alerts and device limit management UI
-- [x] 6. Update frontend/js/dashboard.js - Handle device limits, blocking functionality
-- [x] 7. Update frontend/css/dashboard.css - Add styles for status indicators
+### Steps to Complete:
+1. [x] Add click event handlers to buttons in history.html
+2. [x] Implement Export as CSV functionality in history.js
+3. [x] Implement Download Report functionality in history.js
+4. [x] Verify all files are properly set up
 
-## Features Implemented
+### Details:
+- "Export as CSV" - exports the history table data as a CSV file
+- "Download Report" - downloads a comprehensive report with all data
 
-### 1. High Usage Device Identification
-- Devices using more than 80% of their data limit are flagged as "High Usage Alerts"
-- Real-time monitoring of per-device bandwidth usage
-- Visual indicators on dashboard showing usage percentage
-
-### 2. Data Limit Configuration
-- Set data limits (in MB) per device via the dashboard
-- Track current usage against configured limits
-- Form UI to easily set limits for any device
-
-### 3. Automatic Internet Blocking
-- When a device exceeds its data limit, it is automatically blocked
-- Blocked devices show "Blocked" status in the device table
-- Separate section showing all blocked devices
-- Option to unblock devices (resets usage count)

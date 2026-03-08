@@ -1,140 +1,469 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Live Monitoring Dashboard</title>
-<link rel="stylesheet" href="/static/css/dashboard.css">
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,sans-serif;
+}
+
+body{
+background:#f4f5f8;
+display:flex;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:240px;
+background:white;
+height:100vh;
+padding:25px;
+border-right:1px solid #e5e5e5;
+}
+
+.logo{
+font-weight:700;
+font-size:20px;
+color:#7b5cff;
+margin-bottom:30px;
+}
+
+.menu a{
+display:block;
+padding:12px;
+margin-bottom:8px;
+border-radius:8px;
+text-decoration:none;
+color:#555;
+}
+
+.menu a:hover{
+background:#f0ecff;
+}
+
+.active{
+background:#f0ecff;
+color:#7b5cff;
+font-weight:600;
+}
+
+.admin{
+position:absolute;
+bottom:30px;
+font-size:14px;
+color:#777;
+}
+
+/* MAIN */
+
+.main{
+flex:1;
+padding:30px 40px;
+}
+
+/* ALERT */
+
+.alert-box{
+display:none;
+background:#ff4d4f;
+color:white;
+padding:12px;
+border-radius:8px;
+margin-bottom:20px;
+font-weight:600;
+animation:blink 1s infinite alternate;
+}
+
+@keyframes blink{
+from{opacity:1;}
+to{opacity:0.6;}
+}
+
+/* HEADER */
+
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+}
+
+.search{
+padding:10px 15px;
+border:1px solid #ddd;
+border-radius:8px;
+width:250px;
+}
+
+.register{
+background:#7b5cff;
+border:none;
+color:white;
+padding:10px 18px;
+border-radius:8px;
+margin-left:10px;
+cursor:pointer;
+}
+
+/* CARDS */
+
+.cards{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:20px;
+margin-bottom:25px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+
+.card h3{
+margin-top:10px;
+font-size:26px;
+}
+
+.green{color:#18a957;}
+.red{color:#e63946;}
+
+/* GRAPH */
+
+.graph-box{
+background:white;
+padding:25px;
+border-radius:12px;
+box-shadow:0 2px 10px rgba(0,0,0,0.05);
+margin-bottom:25px;
+}
+
+/* TABLE */
+
+.table-box{
+background:white;
+padding:25px;
+border-radius:12px;
+box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:14px;
+border-bottom:1px solid #eee;
+font-size:14px;
+}
+
+th{
+text-align:left;
+color:#777;
+font-weight:600;
+}
+
+.status{
+padding:4px 10px;
+border-radius:20px;
+font-size:12px;
+}
+
+.online{
+background:#e6f7ee;
+color:#18a957;
+}
+
+.flag{
+background:#fdecec;
+color:#e63946;
+}
+
+/* BLOCKED DEVICE */
+
+.blocked-row{
+background:#ffe6e6;
+}
+
+.blocked-status{
+background:#ff4d4f;
+color:white;
+padding:4px 10px;
+border-radius:12px;
+font-size:12px;
+}
+
+button.small{
+padding:6px 10px;
+border-radius:6px;
+border:none;
+margin-right:5px;
+cursor:pointer;
+}
+
+.throttle{background:#ddd;}
+.block{background:#e63946;color:white;}
+.limit{background:#7b5cff;color:white;}
+
+</style>
 </head>
 
 <body>
-<canvas id="bandwidthChart"></canvas>
 
-<div class="layout">
+<!-- SIDEBAR -->
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-        <div class="brand">
-            <div class="logo-icon"></div>
-            <div>
-                <h2>NetBandwidth</h2>
-                <span>ADMIN CONSOLE</span>
-            </div>
-        </div>
+<div class="sidebar">
 
-        <ul class="menu">
-            <li class="active">Dashboard</li>
-            <li onclick="window.location='/history'">History</li>
-        </ul>
-    </aside>
+<div class="logo">NetBandwidth</div>
 
-    <!-- MAIN CONTENT -->
-    <main class="content">
+<div class="menu">
+<a class="active" href="#">Dashboard</a>
+<a href="history.html">History</a>
+</div>
 
-        <div class="header">
-            <h1>Live Monitoring Dashboard</h1>
-        </div>
-
-        <!-- STAT CARDS -->
-        <div class="cards">
-            <div class="card">
-                <h4>Total Bandwidth</h4>
-                <h2 id="totalBandwidth">0 TB</h2>
-            </div>
-
-            <div class="card">
-                <h4>Active Devices</h4>
-                <h2 id="activeDevices">0</h2>
-            </div>
-
-            <div class="card">
-                <h4>High Usage Alerts</h4>
-                <h2 id="alerts">0</h2>
-            </div>
-
-            <div class="card">
-                <h4>Blocked Devices</h4>
-                <h2 id="blockedCount">0</h2>
-            </div>
-        </div>
-
-        <!-- CURRENT NETWORK ACTIVITY -->
-        <div class="graph-section">
-            <h3>Current Network Activity</h3>
-            <h2 id="currentSpeed">0 Mbps</h2>
-            <div class="chart-container">
-                <canvas id="networkChart"></canvas>
-            </div>
-        </div>
-
-        <!-- DEVICE TABLE -->
-        <div class="device-section">
-            <h3>Device Management</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Device</th>
-                        <th>IP</th>
-                        <th>Status</th>
-                        <th>Usage</th>
-                        <th>Data Limit (MB)</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="deviceTable"></tbody>
-            </table>
-        </div>
-
-        <!-- HIGH USAGE ALERTS SECTION -->
-        <div class="device-section" id="highUsageSection" style="display:none;">
-            <h3>⚠️ High Usage Alerts</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Device</th>
-                        <th>IP</th>
-                        <th>Usage %</th>
-                        <th>Current (MB)</th>
-                        <th>Limit (MB)</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="highUsageTable"></tbody>
-            </table>
-        </div>
-
-        <!-- BLOCKED DEVICES SECTION -->
-        <div class="device-section" id="blockedSection" style="display:none;">
-            <h3>🚫 Blocked Devices (Data Limit Exceeded)</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Device</th>
-                        <th>IP</th>
-                        <th>Used (MB)</th>
-                        <th>Limit (MB)</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="blockedTable"></tbody>
-            </table>
-        </div>
-
-        <!-- ADD DEVICE LIMIT FORM -->
-        <div class="device-section">
-            <h3>Set Device Data Limit</h3>
-            <form id="limitForm" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-                <input type="text" id="deviceName" placeholder="Device Name" style="padding:8px; border:1px solid #ddd; border-radius:4px;">
-                <input type="text" id="deviceIP" placeholder="IP Address" style="padding:8px; border:1px solid #ddd; border-radius:4px;">
-                <input type="number" id="dataLimit" placeholder="Limit (MB)" style="padding:8px; border:1px solid #ddd; border-radius:4px;">
-                <button type="submit" style="padding:8px 16px; background:#7c5dfa; color:white; border:none; border-radius:4px; cursor:pointer;">Set Limit</button>
-            </form>
-        </div>
-
-    </main>
+<div class="admin">
+Admin User<br>
+Lavender Cluster Admin
+</div>
 
 </div>
 
-<script src="/static/js/dashboard.js"></script>
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="top">
+
+<div>
+<h2>Live Monitoring Dashboard</h2>
+<p style="color:#777">Real-time status of your network infrastructure</p>
+</div>
+
+<div>
+<input class="search" placeholder="Search devices...">
+<button class="register">+ Register Device</button>
+</div>
+
+</div>
+
+<!-- ALERT -->
+
+<div id="alertBox" class="alert-box">
+⚠ Suspicious Network Activity Detected!
+Device: <b id="alertDevice"></b>
+</div>
+
+<!-- CARDS -->
+
+<div class="cards">
+
+<div class="card">
+<p>Total Bandwidth</p>
+<h3 id="bandwidth">1.2 TB</h3>
+<p class="green">+12% from yesterday</p>
+</div>
+
+<div class="card">
+<p>Active Devices</p>
+<h3 id="devices">42 Online</h3>
+<p class="green">95% total capacity</p>
+</div>
+
+<div class="card">
+<p>High Usage Alerts</p>
+<h3 id="alerts">3 Active</h3>
+<p class="red">Critical thresholds met</p>
+</div>
+
+<div class="card">
+<p>Network Health</p>
+<h3 id="health">99.8%</h3>
+<p class="green">Stable connection</p>
+</div>
+
+</div>
+
+<!-- GRAPH -->
+
+<div class="graph-box">
+
+<h3>Current Network Activity</h3>
+<p style="color:#777;margin-bottom:10px;">Real-time throughput analysis</p>
+
+<canvas id="trafficChart"></canvas>
+
+</div>
+
+<!-- DEVICE TABLE -->
+
+<div class="table-box">
+
+<h3>Device Management</h3>
+
+<table>
+
+<tr>
+<th>Device Name</th>
+<th>IP Address</th>
+<th>Usage</th>
+<th>Speed</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+
+<tr id="device1">
+<td>MacBook-Pro-Admin</td>
+<td>192.168.1.102</td>
+<td id="usage1">3.4 GB</td>
+<td id="speed1">120 Mbps</td>
+<td id="status1"><span class="status online">Online</span></td>
+<td>
+<button class="small throttle" onclick="throttleDevice()">Throttle</button>
+<button class="small block" onclick="blockDevice()">Block</button>
+<button class="small limit" onclick="setLimit()">Set Limit</button>
+</td>
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+/* GRAPH */
+
+const ctx=document.getElementById('trafficChart').getContext('2d')
+
+let trafficChart=new Chart(ctx,{
+type:'line',
+data:{
+labels:["10:00","10:05","10:10","10:15","10:20","10:25","10:30"],
+datasets:[{
+data:[120,400,220,360,100,480,300],
+borderColor:"#7b5cff",
+backgroundColor:"rgba(123,92,255,0.15)",
+fill:true,
+tension:0.4
+}]
+},
+options:{
+plugins:{legend:{display:false}},
+scales:{y:{beginAtZero:true}}
+}
+})
+
+/* LIVE DASHBOARD DATA */
+
+setInterval(()=>{
+
+let bw=(Math.random()*2+1).toFixed(1)
+document.getElementById("bandwidth").innerText=bw+" TB"
+
+let dev=40+Math.floor(Math.random()*5)
+document.getElementById("devices").innerText=dev+" Online"
+
+let alerts=Math.floor(Math.random()*5)
+document.getElementById("alerts").innerText=alerts+" Active"
+
+let health=(99+Math.random()).toFixed(2)
+document.getElementById("health").innerText=health+"%"
+
+trafficChart.data.datasets[0].data.push(Math.floor(Math.random()*500))
+trafficChart.data.datasets[0].data.shift()
+trafficChart.update()
+
+},3000)
+
+/* SUSPICIOUS ACTIVITY ALERT */
+
+function detectSuspiciousActivity(){
+
+let usage=Math.floor(Math.random()*500)
+
+if(usage>100){
+
+let devices=["Unknown Android Device","Streaming Box","External Laptop"]
+
+let randomDevice=devices[Math.floor(Math.random()*devices.length)]
+
+document.getElementById("alertBox").style.display="block"
+document.getElementById("alertDevice").innerText=randomDevice
+
+}else{
+
+document.getElementById("alertBox").style.display="none"
+
+}
+
+}
+
+setInterval(detectSuspiciousActivity,5000)
+
+/* AUTO BLOCK */
+
+function monitorDevices(){
+
+let usage=Math.floor(Math.random()*12)
+
+document.getElementById("usage1").innerText=usage+" GB"
+
+if(usage>8){
+
+document.getElementById("device1").classList.add("blocked-row")
+
+document.getElementById("status1").innerHTML=
+'<span class="blocked-status">Blocked</span>'
+
+document.getElementById("speed1").innerText="0 Mbps"
+
+}
+
+}
+
+setInterval(monitorDevices,4000)
+
+/* BUTTON ACTIONS */
+
+function blockDevice(){
+
+document.getElementById("device1").classList.add("blocked-row")
+document.getElementById("status1").innerHTML='<span class="blocked-status">Blocked</span>'
+document.getElementById("speed1").innerText="0 Mbps"
+
+alert("Device disconnected from network")
+
+}
+
+function throttleDevice(){
+
+document.getElementById("speed1").innerText="20 Mbps"
+alert("Device speed reduced")
+
+}
+
+function setLimit(){
+
+document.getElementById("speed1").innerText="5 Mbps"
+alert("Bandwidth limit applied")
+
+}
+
+</script>
+
 </body>
 </html>

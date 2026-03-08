@@ -1,167 +1,584 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NetBandwidth</title>
-<link rel="stylesheet" href="/static/css/style.css"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI, sans-serif;
+}
+
+body{
+background:#f7f7f9;
+color:#222;
+}
+
+.container{
+width:1200px;
+margin:auto;
+}
+
+/* NAVBAR */
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 0;
+}
+
+.logo{
+font-weight:700;
+font-size:20px;
+color:#6d4aff;
+}
+
+nav ul{
+display:flex;
+gap:30px;
+list-style:none;
+}
+
+nav a{
+text-decoration:none;
+color:#444;
+font-size:14px;
+}
+
+.btn{
+padding:10px 18px;
+border-radius:6px;
+border:none;
+cursor:pointer;
+}
+
+.btn-primary{
+background:#7a5cff;
+color:white;
+}
+
+.btn-outline{
+border:1px solid #7a5cff;
+color:#7a5cff;
+background:white;
+}
+
+
+/* HERO */
+
+.hero{
+text-align:center;
+padding:60px 0;
+}
+
+.hero h1{
+font-size:48px;
+font-weight:700;
+line-height:1.2;
+}
+
+.hero span{
+color:#8d6cff;
+}
+
+.hero p{
+margin-top:15px;
+color:#666;
+font-size:16px;
+}
+
+.hero-buttons{
+margin-top:30px;
+display:flex;
+justify-content:center;
+gap:15px;
+}
+
+.hero-image{
+margin-top:40px;
+}
+
+.hero-image img{
+width:900px;
+border-radius:10px;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+
+/* WHY SECTION */
+
+.why{
+margin-top:80px;
+text-align:center;
+}
+
+.why h2{
+font-size:32px;
+margin-bottom:20px;
+}
+
+.why-grid{
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:40px;
+margin-top:40px;
+}
+
+.stats{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+.stat-box{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.05);
+}
+
+.stat-box h3{
+color:#7a5cff;
+font-size:22px;
+}
+
+/* FEATURES */
+
+.features{
+margin-top:80px;
+text-align:center;
+}
+
+.feature-grid{
+margin-top:40px;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:25px;
+}
+
+.feature{
+background:white;
+padding:25px;
+border-radius:10px;
+box-shadow:0 5px 12px rgba(0,0,0,0.05);
+text-align:left;
+}
+
+.feature h4{
+margin-bottom:8px;
+}
+
+
+/* STATS BAR */
+
+.big-stats{
+margin-top:80px;
+background:#8d6cff;
+color:white;
+padding:40px 0;
+}
+
+.big-stats-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+text-align:center;
+}
+
+.big-stats h3{
+font-size:28px;
+}
+
+
+/* CTA */
+
+.cta{
+margin-top:80px;
+background:white;
+padding:60px;
+border-radius:15px;
+text-align:center;
+box-shadow:0 5px 15px rgba(0,0,0,0.05);
+}
+
+.cta h2{
+font-size:34px;
+}
+
+.cta p{
+margin:10px 0 25px;
+color:#666;
+}
+
+.cta-buttons{
+display:flex;
+justify-content:center;
+gap:15px;
+}
+
+
+/* FOOTER */
+
+footer{
+margin-top:80px;
+padding:40px 0;
+border-top:1px solid #eee;
+}
+
+.footer-grid{
+display:grid;
+grid-template-columns:2fr 1fr 1fr 1fr;
+gap:30px;
+}
+
+footer h4{
+margin-bottom:10px;
+}
+
+footer p{
+color:#777;
+font-size:14px;
+}
+
+footer ul{
+list-style:none;
+}
+
+footer li{
+margin-bottom:6px;
+font-size:14px;
+color:#555;
+}
+
+.copyright{
+text-align:center;
+margin-top:20px;
+color:#888;
+font-size:13px;
+}
+.alert-box{
+display:none;
+background:#ff4d4f;
+color:white;
+padding:15px;
+border-radius:8px;
+margin-bottom:20px;
+font-weight:600;
+animation:blink 1s infinite alternate;
+}
+
+@keyframes blink{
+from{opacity:1;}
+to{opacity:0.6;}
+}
+</style>
 </head>
+
 
 <body>
 
+<div class="container">
+
 <!-- NAVBAR -->
-<header class="navbar">
-  <div class="logo">NetBandwidth</div>
-  <nav>
-    <a href="#">Solutions</a>
-    <a href="#">Features</a>
-    <a href="#">Pricing</a>
-    <a href="#">Docs</a>
-    <a href="#">Login</a>
-    <a href="/dashboard" class="btn-primary">Get Started</a>
-  </nav>
-</header>
+
+<nav>
+
+<div class="logo">NetBandwidth</div>
+
+<ul>
+<li><a href="#">Solutions</a></li>
+<li><a href="#">Features</a></li>
+<li><a href="#">Pricing</a></li>
+<li><a href="#">Docs</a></li>
+<li><a href="#">Login</a></li>
+</ul>
+
+<button class="btn btn-primary">Get Started</button>
+
+</nav>
+
 
 <!-- HERO -->
+
 <section class="hero">
-  <h1>Smart Bandwidth <br><span>Monitoring & Control</span></h1>
-  <p>
-    The all-in-one system for home and office networks. Take full control
-    with real-time tracking, automated threshold enforcement, and deep
-    device-level insights.
-  </p>
 
-  <div class="hero-buttons">
-    <a href="/dashboard" class="btn-primary">Start Free Trial</a>
-    <a href="#" class="btn-outline">Watch Demo</a>
-  </div>
+<h1>
+Smart Bandwidth<br>
+Monitoring <span>& Control</span>
+</h1>
 
-  <div class="hero-graph">
-    <canvas id="heroChart"></canvas>
-  </div>
+<p>
+The all-in-one system for home and office networks.
+</p>
+
+<div class="hero-buttons">
+<button class="btn btn-primary" onclick="startTrial()">Start Free Trial</button>
+<button class="btn btn-outline">Watch Demo</button>
+</div>
+
+<div class="hero-image">
+<img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71" alt="">
+</div>
+
 </section>
 
-<!-- WHY BANDWIDTH MATTERS -->
+
+
+<!-- WHY -->
+
 <section class="why">
-  <h2>Why Bandwidth Control Matters</h2>
 
-  <div class="why-container">
-    <div class="why-text">
-      <p>
-        In today's hyper-connected environment, network congestion isn't just an inconvenience — it's a productivity killer.
-        Whether you're managing a remote-first team or a smart home, uncontrolled data usage leads to latency spikes,
-        dropped calls, and slow cloud syncs.
-      </p>
-      <p>
-        NetBandwidth provides the visibility required to identify bottlenecks before they impact your workflow,
-        allowing you to prioritize critical traffic and manage resource distribution effectively.
-      </p>
-    </div>
+<h2>Why Bandwidth Control Matters</h2>
 
-    <div class="why-stats">
-      <div class="stat-box">
-        <h3>40%</h3>
-        <p>Avg Speed Boost</p>
-      </div>
-      <div class="stat-box">
-        <h3>-65%</h3>
-        <p>Latency Reduction</p>
-      </div>
-      <div class="stat-box">
-        <h3>100%</h3>
-        <p>Device Visibility</p>
-      </div>
-      <div class="stat-box">
-        <h3>0</h3>
-        <p>Manual Configs</p>
-      </div>
-    </div>
-  </div>
+<div class="why-grid">
+
+<p style="text-align:left;color:#666;line-height:1.7">
+In today's connected environment, network congestion can slow
+down work and productivity. Our system gives real-time insights
+to manage bandwidth usage effectively.
+</p>
+
+<div class="stats">
+
+<div class="stat-box">
+<h3>40%</h3>
+<p>Avg Speed Boost</p>
+</div>
+
+<div class="stat-box">
+<h3>-65%</h3>
+<p>Latency Reduction</p>
+</div>
+
+<div class="stat-box">
+<h3>100%</h3>
+<p>Device Visibility</p>
+</div>
+
+<div class="stat-box">
+<h3>0</h3>
+<p>Manual Configs</p>
+</div>
+
+</div>
+
+</div>
+
 </section>
+
+
 
 <!-- FEATURES -->
+
 <section class="features">
-  <h2>All-In-One Feature Suite</h2>
-  <p class="subtext">Combining high-level benefits with technical precision for total network sovereignty.</p>
 
-  <div class="feature-grid">
+<h2>All-In-One Feature Suite</h2>
 
-    <div class="feature-card">
-      <h4>Real-Time Monitoring</h4>
-      <p>Live traffic analysis with per-device bandwidth metrics updated every second.</p>
-    </div>
+<div class="feature-grid">
 
-    <div class="feature-card">
-      <h4>Device Tracking</h4>
-      <p>Automatically detect connected devices and monitor individual usage behavior.</p>
-    </div>
+<div class="feature">
+<h4>Real-Time Monitoring</h4>
+<p>Track bandwidth usage and connected devices.</p>
+</div>
 
-    <div class="feature-card">
-      <h4>Threshold Enforcement</h4>
-      <p>Set data usage caps and automatically throttle or block high-bandwidth consumers.</p>
-    </div>
+<div class="feature">
+<h4>Device Tracking</h4>
+<p>Identify devices consuming most bandwidth.</p>
+</div>
 
-    <div class="feature-card">
-      <h4>Deep Packet Insights</h4>
-      <p>Analyze TCP/UDP flows to understand application-level traffic patterns.</p>
-    </div>
+<div class="feature">
+<h4>Threshold Enforcement</h4>
+<p>Set automatic limits for heavy usage.</p>
+</div>
 
-    <div class="feature-card">
-      <h4>Historical Archiving</h4>
-      <p>Store usage logs for auditing, compliance, and long-term performance evaluation.</p>
-    </div>
+<div class="feature">
+<h4>Deep Packet Insights</h4>
+<p>Analyze network traffic in detail.</p>
+</div>
 
-    <div class="feature-card">
-      <h4>Smart Alerts</h4>
-      <p>Receive instant alerts when unusual bandwidth spikes are detected.</p>
-    </div>
+<div class="feature">
+<h4>Historical Archiving</h4>
+<p>Store up to 2 years of network history.</p>
+</div>
 
-    <div class="feature-card">
-      <h4>QoS Prioritization</h4>
-      <p>Allocate bandwidth priority to critical services like VoIP or cloud backups.</p>
-    </div>
+<div class="feature">
+<h4>Smart Alerts</h4>
+<p>Get alerts for unusual activity.</p>
+</div>
 
-    <div class="feature-card">
-      <h4>Open API Access</h4>
-      <p>Integrate with external monitoring tools using REST APIs.</p>
-    </div>
+<div class="feature">
+<h4>QoS Prioritization</h4>
+<p>Prioritize critical apps like Zoom.</p>
+</div>
 
-    <div class="feature-card">
-      <h4>Multi-Node Support</h4>
-      <p>Monitor multiple routers and branch networks from a centralized dashboard.</p>
-    </div>
+<div class="feature">
+<h4>Open API Access</h4>
+<p>Integrate data into dashboards.</p>
+</div>
 
-  </div>
+<div class="feature">
+<h4>Multi-Node Support</h4>
+<p>Manage multiple routers easily.</p>
+</div>
+
+</div>
+
 </section>
 
-<!-- STATS STRIP -->
-<section class="strip">
-  <div>500k+<span>Devices Managed</span></div>
-  <div>99.9%<span>Uptime Record</span></div>
-  <div>24/7<span>Live Monitoring</span></div>
-  <div>15ms<span>Average Latency</span></div>
+</div>
+
+<div id="alertBox" class="alert-box">
+⚠ Suspicious Network Activity Detected!
+Unusual bandwidth spike from device: <b id="alertDevice"></b>
+</div>
+
+<!-- BIG STATS -->
+
+<section class="big-stats">
+
+<div class="container">
+
+<div class="big-stats-grid">
+
+<div>
+<h3>500k+</h3>
+<p>Devices Managed</p>
+</div>
+
+<div>
+<h3>99.9%</h3>
+<p>Uptime Record</p>
+</div>
+
+<div>
+<h3>24/7</h3>
+<p>Live Monitoring</p>
+</div>
+
+<div>
+<h3>15ms</h3>
+<p>Average Latency</p>
+</div>
+
+</div>
+
+</div>
+
 </section>
+
+
+
+<div class="container">
 
 <!-- CTA -->
+
 <section class="cta">
-  <h2>Ready to reclaim your network's power?</h2>
-  <p>Join 50,000+ power users and IT professionals who trust NetBandwidth for mission-critical performance.</p>
-  <div class="hero-buttons">
-    <a href="/dashboard" class="btn-primary">Start Your 14-Day Free Trial</a>
-    <a href="#" class="btn-outline">Talk to an Expert</a>
-  </div>
+
+<h2>Ready to reclaim your network's power?</h2>
+
+<p>Join thousands of users managing their bandwidth smartly.</p>
+
+<div class="cta-buttons">
+<button class="btn btn-primary" onclick="startTrial()">Start Your 14-Day Free Trial</button>
+<button class="btn btn-outline">Talk to an Expert</button>
+</div>
+
 </section>
 
+
+
 <!-- FOOTER -->
-<footer class="footer">
-  <div class="footer-logo">NetBandwidth</div>
-  <p>Superior visibility and absolute control for the modern network.</p>
-  <div class="copyright">
-    © 2026 NetBandwidth Systems Inc. All rights reserved.
-  </div>
+
+<footer>
+
+<div class="footer-grid">
+
+<div>
+<h3>NetBandwidth</h3>
+<p>
+Superb visibility and control for the modern network.
+</p>
+</div>
+
+<div>
+<h4>Platform</h4>
+<ul>
+<li>System Overview</li>
+<li>Features</li>
+<li>Cloud Dashboard</li>
+</ul>
+</div>
+
+<div>
+<h4>Resources</h4>
+<ul>
+<li>Docs</li>
+<li>API Reference</li>
+<li>Community</li>
+</ul>
+</div>
+
+<div>
+<h4>Legal</h4>
+<ul>
+<li>Privacy Policy</li>
+<li>Terms</li>
+<li>Compliance</li>
+</ul>
+</div>
+
+</div>
+
+<div class="copyright">
+© 2026 NetBandwidth Systems
+</div>
+
 </footer>
+
+</div>
+
+
+
+<script>
+
+function startTrial(){
+window.location.href="dashboard.html";
+}
+function detectSuspiciousActivity(){
+
+let usage=Math.floor(Math.random()*500);
+
+if(usage>450){
+
+let devices=[
+"Unknown Android Device",
+"Streaming Box",
+"External Laptop",
+"Unknown Router"
+];
+
+let randomDevice=devices[Math.floor(Math.random()*devices.length)];
+
+document.getElementById("alertBox").style.display="block";
+document.getElementById("alertDevice").innerText=randomDevice;
+
+}else{
+
+document.getElementById("alertBox").style.display="none";
+
+}
+
+}
+
+/* run every 5 seconds */
+
+setInterval(detectSuspiciousActivity,5000);
+</script>
 
 </body>
 </html>

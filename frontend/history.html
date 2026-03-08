@@ -1,96 +1,489 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lavender Usage History</title>
-<link rel="stylesheet" href="/static/css/dashboard.css">
-<link rel="stylesheet" href="/static/css/history.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI, sans-serif;
+}
+
+body{
+background:#f4f5f8;
+color:#333;
+}
+
+/* TOP NAV */
+
+nav{
+background:white;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:15px 40px;
+border-bottom:1px solid #e6e6e6;
+}
+
+.logo{
+font-weight:700;
+font-size:20px;
+color:#7b5cff;
+}
+
+.menu{
+display:flex;
+gap:30px;
+}
+
+.menu a{
+text-decoration:none;
+color:#666;
+font-weight:500;
+}
+
+.menu .active{
+color:#7b5cff;
+border-bottom:2px solid #7b5cff;
+}
+
+.search{
+padding:8px 12px;
+border-radius:8px;
+border:1px solid #ddd;
+}
+
+/* PAGE */
+
+.container{
+padding:40px;
+display:grid;
+grid-template-columns:3fr 1fr;
+gap:30px;
+}
+
+.header{
+margin-bottom:20px;
+}
+
+.header h1{
+font-size:34px;
+margin-bottom:8px;
+}
+
+.header p{
+color:#777;
+}
+
+/* BUTTONS */
+
+.btn{
+padding:10px 16px;
+border-radius:8px;
+border:none;
+cursor:pointer;
+margin-left:10px;
+}
+
+.btn-outline{
+border:1px solid #7b5cff;
+background:white;
+color:#7b5cff;
+}
+
+.btn-purple{
+background:#7b5cff;
+color:white;
+}
+
+/* FILTERS */
+
+.filters{
+background:white;
+padding:15px;
+border-radius:10px;
+margin:20px 0;
+display:flex;
+gap:15px;
+}
+
+.filters select{
+padding:8px;
+border-radius:6px;
+border:1px solid #ddd;
+}
+
+/* TABLE */
+
+.table-box{
+background:white;
+border-radius:12px;
+padding:20px;
+box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #eee;
+font-size:14px;
+}
+
+th{
+text-align:left;
+color:#777;
+}
+
+.badge{
+padding:4px 10px;
+border-radius:15px;
+font-size:12px;
+}
+
+.monitored{
+background:#e8f1ff;
+color:#3574ff;
+}
+
+.throttle{
+background:#fff3e0;
+color:#ff8c00;
+}
+
+.block{
+background:#fdecea;
+color:#e53935;
+}
+
+/* RIGHT SIDEBAR */
+
+.sidebar-card{
+background:white;
+border-radius:12px;
+padding:20px;
+margin-bottom:20px;
+box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+
+.bar{
+height:8px;
+background:#eee;
+border-radius:10px;
+margin-top:6px;
+}
+
+.bar span{
+display:block;
+height:8px;
+background:#7b5cff;
+border-radius:10px;
+}
+
+.total{
+background:#8b6cff;
+color:white;
+text-align:center;
+padding:25px;
+border-radius:14px;
+}
+
+.total h2{
+font-size:36px;
+margin-top:10px;
+}
+
+.pagination{
+margin-top:10px;
+text-align:center;
+}
+
+.pagination button{
+margin:3px;
+padding:6px 10px;
+border:none;
+border-radius:6px;
+background:#eee;
+cursor:pointer;
+}
+
+</style>
 </head>
+
 
 <body>
 
-<div class="layout">
+<nav>
 
-<!-- SIDEBAR -->
-<aside class="sidebar">
-    <div class="brand">
-        <div class="logo"></div>
-        <h2>NetBandwidth</h2>
-    </div>
+<div class="logo">NetBandwidth</div>
 
-    <ul class="menu">
-        <li onclick="window.location='/dashboard'">Dashboard</li>
-        <li class="active">History</li>
-    </ul>
-</aside>
+<input class="search" placeholder="Search logs...">
 
-<!-- MAIN CONTENT -->
-<main class="content">
-
-    <div class="header">
-        <h1>Lavender Usage History</h1>
-        <div class="header-actions">
-            <button class="outline">Export as CSV</button>
-            <button class="primary">Download Report</button>
-        </div>
-    </div>
-
-    <!-- FILTER BAR -->
-    <div class="filters">
-        <select><option>Last 30 Days</option></select>
-        <select><option>All Devices</option></select>
-        <select><option>High Usage</option></select>
-        <select><option>Any Action</option></select>
-        <button class="primary">Apply Filters</button>
-    </div>
-
-    <div class="history-grid">
-
-        <!-- TABLE -->
-        <div class="table-card">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Timestamp</th>
-                        <th>Device</th>
-                        <th>IP</th>
-                        <th>Data In/Out</th>
-                        <th>Action</th>
-                        <th>Remarks</th>
-                    </tr>
-                </thead>
-                <tbody id="historyTable"></tbody>
-            </table>
-        </div>
-
-        <!-- RIGHT SIDE ANALYTICS -->
-        <div class="side-analytics">
-
-            <div class="card">
-                <h3>Daily Peak (GB)</h3>
-                <div class="chart-container">
-                    <canvas id="dailyPeakChart"></canvas>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>Top Consumers</h3>
-                <div id="topConsumers"></div>
-            </div>
-
-            <div class="total-card">
-                <h4>TOTAL BANDWIDTH (30D)</h4>
-                <h1 id="totalBandwidth">0 TB</h1>
-            </div>
-
-        </div>
-
-    </div>
-
-</main>
+<div class="menu">
+<a href="dashboard.html">Dashboard</a>
+<a class="active" href="#">History</a>
+<a href="#">Devices</a>
+<a href="#">Settings</a>
 </div>
 
-<script src="/static/js/history.js"></script>
+</nav>
+
+
+<div class="container">
+
+<div>
+
+<div class="header">
+
+<h1>Lavender Usage History</h1>
+<p>Monitor and audit historical network activity across all endpoints.</p>
+
+<button class="btn btn-outline" onclick="exportCSV()">Export as CSV</button>
+<button class="btn btn-purple" onclick="downloadReport()">Download Report</button>
+
+</div>
+
+
+<div class="filters">
+
+<select>
+<option>Last 30 Days</option>
+</select>
+
+<select>
+<option>All Devices</option>
+</select>
+
+<select>
+<option>High Usage</option>
+</select>
+
+<select>
+<option>Any Action</option>
+</select>
+
+<button class="btn btn-purple">Apply Filters</button>
+
+</div>
+
+
+
+<div class="table-box">
+
+<table id="historyTable">
+
+<thead>
+
+<tr>
+<th>Timestamp</th>
+<th>Device Name</th>
+<th>IP Address</th>
+<th>Data In/Out</th>
+<th>Action Taken</th>
+<th>Remarks</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+</tbody>
+
+</table>
+
+<div class="pagination">
+<button>1</button>
+<button>2</button>
+<button>3</button>
+</div>
+
+</div>
+
+</div>
+
+
+
+<div>
+
+<div class="sidebar-card">
+
+<h3>Daily Peak (GB)</h3>
+
+<div style="margin-top:15px">
+Mon<div class="bar"><span style="width:40%"></span></div>
+Tue<div class="bar"><span style="width:65%"></span></div>
+Wed<div class="bar"><span style="width:85%"></span></div>
+Thu<div class="bar"><span style="width:50%"></span></div>
+Fri<div class="bar"><span style="width:90%"></span></div>
+</div>
+
+</div>
+
+
+
+<div class="sidebar-card">
+
+<h3>Top Consumers</h3>
+
+<div style="margin-top:10px">
+Server-Alpha
+<div class="bar"><span style="width:80%"></span></div>
+
+Streaming-Box
+<div class="bar"><span style="width:60%"></span></div>
+
+Workstation-01
+<div class="bar"><span style="width:45%"></span></div>
+
+</div>
+
+</div>
+
+
+
+<div class="total">
+
+<p>Total Bandwidth (30D)</p>
+<h2 id="totalBW">1.42 TB</h2>
+<p>+12.5% from last month</p>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<script>
+
+/* LIVE DATA GENERATION */
+
+const devices=[
+"Workstation-01",
+"Streaming-Box",
+"Mobile-User-A",
+"Unknown-Device",
+"Server-Alpha"
+];
+
+const actions=["Monitored","Throttled","Blocked"];
+
+function generateRow(){
+
+let device=devices[Math.floor(Math.random()*devices.length)];
+
+let ip="192.168.1."+Math.floor(Math.random()*200);
+
+let dataIn=(Math.random()*20).toFixed(1);
+let dataOut=(Math.random()*10).toFixed(1);
+
+let action=actions[Math.floor(Math.random()*actions.length)];
+
+let remark="Normal activity";
+
+let badgeClass="monitored";
+
+if(action==="Throttled"){badgeClass="throttle"}
+if(action==="Blocked"){badgeClass="block"}
+
+return `
+<tr>
+
+<td>${new Date().toLocaleString()}</td>
+
+<td>${device}</td>
+
+<td>${ip}</td>
+
+<td>${dataIn} GB / ${dataOut} GB</td>
+
+<td><span class="badge ${badgeClass}">${action}</span></td>
+
+<td>${remark}</td>
+
+</tr>
+`;
+
+}
+
+function loadData(){
+
+let table=document.querySelector("#historyTable tbody");
+
+table.innerHTML="";
+
+for(let i=0;i<5;i++){
+
+table.innerHTML+=generateRow();
+
+}
+
+}
+
+loadData();
+
+
+/* CSV EXPORT */
+
+function exportCSV(){
+
+let rows=document.querySelectorAll("table tr");
+
+let csv=[];
+
+rows.forEach(row=>{
+
+let cols=row.querySelectorAll("td,th");
+
+let data=[];
+
+cols.forEach(col=>data.push(col.innerText));
+
+csv.push(data.join(","));
+
+});
+
+let csvFile=new Blob([csv.join("\n")],{type:"text/csv"});
+
+let link=document.createElement("a");
+
+link.download="network_history.csv";
+
+link.href=window.URL.createObjectURL(csvFile);
+
+link.click();
+
+}
+
+
+/* DOWNLOAD REPORT */
+
+function downloadReport(){
+
+let table=document.getElementById("historyTable").outerHTML;
+
+let blob=new Blob([table],{type:"text/html"});
+
+let link=document.createElement("a");
+
+link.download="network_report.html";
+
+link.href=URL.createObjectURL(blob);
+
+link.click();
+
+}
+
+</script>
+
 </body>
 </html>
